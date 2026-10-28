@@ -1,0 +1,6 @@
+commonplusplus is header-only and provides CMake targets:
+
+    find_package(commonplusplus CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE commonplusplus::commonplusplus)
+
+Without CMake, add -DGLM_FORCE_SWIZZLE -DGLM_ENABLE_EXPERIMENTAL to your compiler flags.
