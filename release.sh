@@ -30,7 +30,8 @@ url=$(sed -n 's/^\s*URL\s\+\(\S\+\).*/\1/p' "$portfile" | head -1)
 if [[ "$ref" =~ ^[0-9a-f]{40}$ ]]; then
     sha="$ref"
 else
-    sha=$(git ls-remote "$url" "$ref" | awk 'NR == 1 { print $1 }')
+    # An annotated tag lists the tag object first; its "^{}" line is the commit it points at
+    sha=$(git ls-remote "$url" "$ref" "$ref^{}" | awk '/\^\{\}$/ { peeled = $1 } NR == 1 { first = $1 } END { print peeled ? peeled : first }')
     [ -n "$sha" ] || { echo "could not resolve '$ref' in $url" >&2; exit 1; }
 fi
 
